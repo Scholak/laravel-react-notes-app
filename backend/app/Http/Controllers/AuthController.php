@@ -15,7 +15,7 @@ class AuthController extends Controller
     /**
      * register
      *
-     * @param  Request $request
+     * @param  RegisterRequest $request
      * @return Response
      */
     public function register(RegisterRequest $request): Response
@@ -28,7 +28,7 @@ class AuthController extends Controller
      /**
      * login
      *
-     * @param  Request $request
+     * @param  LoginRequest $request
      * @return Response
      */
     public function login(LoginRequest $request): Response
