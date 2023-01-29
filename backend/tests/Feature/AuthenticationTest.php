@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -79,6 +80,20 @@ class AuthenticationTest extends TestCase
             'email' => 'test@gmail.com',
             'password' => 'password',
         ]);
+
+        $response->assertStatus(200);
+    }
+
+     /**
+     * this function test user can logout from the system
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_logout_successfully(): void
+    {
+        Sanctum::actingAs($this->user);
+    
+        $response = $this->postJson('/api/logout');
 
         $response->assertStatus(200);
     }

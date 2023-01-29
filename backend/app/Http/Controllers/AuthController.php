@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 
@@ -47,5 +48,19 @@ class AuthController extends Controller
         $cookie = cookie('jwt', $token, 60 * 60 * 24 * 30);
 
         return response(['message' => 'logged in successfully'], 200)->withCookie($cookie);
+    }
+    
+    /**
+     * logout
+     *
+     * @param  Request $request
+     * @return Response
+     */
+    public function logout(Request $request): Response
+    {
+        $cookie = Cookie::forget('jwt');
+        $request->user()->currentAccessToken()->delete();
+
+        return response(['message' => 'logged out successfully'], 200)->withCookie($cookie);
     }
 }
