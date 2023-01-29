@@ -30,9 +30,4 @@ class RegisterRequest extends FormRequest
             'password_confirmation' => 'required|same:password'
         ];
     }
-
-    protected function passedValidation(): void
-    {
-        $this->merge(['password' => bcrypt($this->password)]);
-    }
 }
