@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Http\Resources\TaskResource;
 use App\Http\Requests\Task\StoreRequest;
 use App\Http\Requests\Task\UpdateRequest;
 
@@ -18,7 +19,10 @@ class TaskController extends Controller
      */
     public function index(Request $request): Response
     {
-        //
+        return response([
+            'messsage' => 'tasks fetched successfully',
+            'tasks' => TaskResource::collection(Task::whereUserId($request->user()->id)->with('user')->get()),
+        ], 200);
     }
 
     /**

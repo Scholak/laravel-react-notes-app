@@ -38,6 +38,20 @@ class TaskTest extends TestCase
     }
 
     /**
+     * this function tests authenticated user can view own tasks
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_view_tasks(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->getJson('/api/tasks');
+
+        $response->assertStatus(200);
+    }
+
+    /**
      * this function tests authenticated user must fill all required fields to create new task
      *
      * @return void
