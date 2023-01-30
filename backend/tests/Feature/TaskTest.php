@@ -32,6 +32,7 @@ class TaskTest extends TestCase
      */
     public function test_authenticated_user_cannot_access_protected_task_routes(): void
     {
+        $response = $this->getJson('/api/tasks');
         $response = $this->postJson('/api/tasks');
 
         $response->assertStatus(401);
