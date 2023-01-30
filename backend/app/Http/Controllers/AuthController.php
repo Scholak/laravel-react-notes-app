@@ -63,4 +63,15 @@ class AuthController extends Controller
 
         return response(['message' => 'logged out successfully'], 200)->withCookie($cookie);
     }
+
+    /**
+     * profile
+     *
+     * @param  Request $request
+     * @return Response
+     */
+    public function profile(Request $request): Response
+    {
+        return response(['user' => 'profile fetched successfully', 'profile' => $request->user()], 200);
+    }
 }

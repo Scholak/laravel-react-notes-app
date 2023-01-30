@@ -97,4 +97,18 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * this function test user can fetch profile information from the system
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_fetch_profile_info_successfully(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->getJson('/api/profile');
+
+        $response->assertStatus(200);
+    }
 }
