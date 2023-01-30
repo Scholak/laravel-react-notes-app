@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Requests\Task\StoreRequest;
 use App\Http\Requests\Task\UpdateRequest;
 
@@ -27,7 +29,9 @@ class TaskController extends Controller
      */
     public function store(StoreRequest $request): Response
     {
-        //
+        $newTask = Task::create([...$request->validated(), 'user_id' => $request->user()->id]);
+
+        return $newTask ? response(['message' => 'task created successfully'], 200) : response(['message' => 'task colud not created'], 400);
     }
 
     /**

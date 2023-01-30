@@ -27,7 +27,6 @@ class UpdateRequest extends FormRequest
             'title' => 'required',
             'body' => 'required',
             'competed' => 'required|boolean',
-            'user_id' => 'required|exists:users,id',
         ];
     }
 }

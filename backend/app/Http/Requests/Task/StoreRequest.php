@@ -26,7 +26,6 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required',
             'body' => 'required',
-            'user_id' => 'required|exists:users,id',
         ];
     }
 }
