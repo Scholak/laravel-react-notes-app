@@ -45,6 +45,7 @@ class TaskTest extends TestCase
         $response = $this->getJson('/api/tasks');
         $response = $this->postJson('/api/tasks');
         $response = $this->putJson('/api/tasks/'.$this->task->id);
+        $response = $this->deleteJson('/api/tasks/'.$this->task->id);
 
         $response->assertStatus(401);
     }
@@ -68,7 +69,7 @@ class TaskTest extends TestCase
      *
      * @return void
      */
-    public function test_authenticated_user_must_fill_required_fields(): void
+    public function test_authenticated_user_must_fill_required_fields_to_create_new_task(): void
     {
         Sanctum::actingAs($this->user);
 
@@ -96,7 +97,7 @@ class TaskTest extends TestCase
     }
 
     /**
-     * this function tests authenticated user must fill all required fields to update new task
+     * this function tests authenticated user must fill all required fields to update task
      *
      * @return void
      */
@@ -110,7 +111,12 @@ class TaskTest extends TestCase
             ->assertJsonValidationErrors(['title', 'body', 'completed']);
     }
 
-    public function test_unexisting_task_must_return_not_found_status_code(): void
+    /**
+     * this function tests unexisting task returns 404 status code for delete function
+     *
+     * @return void
+     */
+    public function test_unexisting_task_must_return_not_found_status_code_for_update_route(): void
     {
         Sanctum::actingAs($this->user);
 
@@ -141,6 +147,11 @@ class TaskTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * this function tests unexisting task returns 404 status code for delete function
+     *
+     * @return void
+     */
     public function test_unexisting_task_must_return_not_found_status_code_for_delete_route(): void
     {
         Sanctum::actingAs($this->user);
