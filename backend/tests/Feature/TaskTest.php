@@ -140,4 +140,27 @@ class TaskTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_unexisting_task_must_return_not_found_status_code_for_delete_route(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->deleteJson('/api/tasks/0', []);
+
+        $response->assertStatus(404);
+    }
+
+    /**
+     * this function tests authenticated user can delete task
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_delete_task(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->deleteJson('/api/tasks/'.$this->task->id, []);
+
+        $response->assertStatus(200);
+    }
 }

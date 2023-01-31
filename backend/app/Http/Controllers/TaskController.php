@@ -76,7 +76,14 @@ class TaskController extends Controller
      */
     public function destroy(int $id): Response
     {
-        //
+        $task = Task::find($id);
+
+        if($task) {
+            $deletedTask = $task->delete();
+            return $deletedTask ? response(['message' => 'task deleted successfully'], 200) : response(['message' => 'task colud not deleted'], 400);
+        } else {
+            return response(['message' => 'task not found'], 404);
+        }
     }
         
     /**
