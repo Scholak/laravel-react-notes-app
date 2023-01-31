@@ -174,4 +174,32 @@ class TaskTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * this function tests unexisting task returns 404 status code for complete function
+     *
+     * @return void
+     */
+    public function test_unexisting_task_must_return_not_found_status_code_for_complete_route(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/tasks/0/complete', []);
+
+        $response->assertStatus(404);
+    }
+
+    /**
+     * this function tests authenticated user can complete or not complete task
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_complete_task(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/tasks/'.$this->task->id.'/complete', []);
+
+        $response->assertStatus(200);
+    }
 }

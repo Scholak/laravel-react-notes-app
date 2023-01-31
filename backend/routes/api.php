@@ -22,4 +22,4 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/profile', [AuthController::class, 'profile'])->middleware('auth:sanctum');
 
 Route::resource('/tasks', TaskController::class)->middleware('auth:sanctum');
-Route::post('/tasks/{id}/complete', [TaskController::class, 'complete'])->middleware('auth:sanctum');;
+Route::put('/tasks/{id}/complete', [TaskController::class, 'complete'])->middleware('auth:sanctum');;

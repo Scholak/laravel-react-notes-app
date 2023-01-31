@@ -94,6 +94,14 @@ class TaskController extends Controller
      */
     public function complete(int $id): Response
     {
-        
+        $task = Task::find($id);
+
+        if($task) {
+            $message = !$task->completed ? 'task completed' : 'task not completed';
+            $completedTask = $task->update(['completed' => !$task->completed]);
+            return $completedTask ? response(['message' => $message], 200) : response(['message' => 'error occured'], 400);
+        } else {
+            return response(['message' => 'task not found'], 404);
+        }
     }
 }
