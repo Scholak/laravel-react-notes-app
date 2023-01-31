@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\Task;
 use App\Models\User;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -13,6 +14,8 @@ class TaskTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+
+    protected Task $task;
     
     public function setUp(): void
     {
@@ -22,6 +25,13 @@ class TaskTest extends TestCase
             'name' => 'example name',
             'email' => 'example@gmail.com',
             'password' => bcrypt('password'),
+        ]);
+
+        $this->task = Task::create([
+            'title' => 'example task title',
+            'body' => 'example task body',
+            'completed' => false,
+            'user_id' => $this->user->id,
         ]);
     }
     
@@ -34,6 +44,7 @@ class TaskTest extends TestCase
     {
         $response = $this->getJson('/api/tasks');
         $response = $this->postJson('/api/tasks');
+        $response = $this->putJson('/api/tasks/'.$this->task->id);
 
         $response->assertStatus(401);
     }
@@ -79,6 +90,52 @@ class TaskTest extends TestCase
         $response = $this->postJson('/api/tasks', [
             'title' => 'example title',
             'body' => 'example body'
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * this function tests authenticated user must fill all required fields to update new task
+     *
+     * @return void
+     */
+    public function test_authenticated_user_must_fill_required_fields_to_update_task(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/tasks/'.$this->task->id, []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['title', 'body', 'completed']);
+    }
+
+    public function test_unexisting_task_must_return_not_found_status_code(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/tasks/0', [
+            'title' => 'example title updated',
+            'body' => 'example body updated',
+            'completed' => true,
+        ]);
+
+        $response->assertStatus(404);
+    }
+
+    /**
+     * this function tests authenticated user can update task
+     *
+     * @return void
+     */
+    public function test_authenticated_user_can_update_task(): void
+    {
+        Sanctum::actingAs($this->user);
+
+        $response = $this->putJson('/api/tasks/'.$this->task->id, [
+            'title' => 'example title updated',
+            'body' => 'example body updated',
+            'completed' => true,
         ]);
 
         $response->assertStatus(200);

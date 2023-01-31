@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required',
             'body' => 'required',
-            'competed' => 'required|boolean',
+            'completed' => 'required|boolean',
         ];
     }
 }

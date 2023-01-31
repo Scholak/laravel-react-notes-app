@@ -58,7 +58,14 @@ class TaskController extends Controller
      */
     public function update(UpdateRequest $request, int $id): Response
     {
-        //
+        $task = Task::find($id);
+
+        if($task) {
+            $updatedTask = $task->update($request->validated());
+            return $updatedTask ? response(['message' => 'task updated successfully'], 200) : response(['message' => 'task colud not updated'], 400);
+        } else {
+            return response(['message' => 'task not found'], 404);
+        }
     }
 
     /**
